@@ -1,17 +1,57 @@
 name: OGM Duyurular Scraper
 
 on:
-  schedule:
-    - cron: '0 */6 * * *'
   workflow_dispatch:
+  schedule:
+    - cron: '0 */6 * * *' # Her 6 saatte bir çalışır
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Repo'yu çek
+        uses: actions/checkout@v3
+
+      - name: Node.js kur
+        uses: actions/setup-node@v3
         with:
           node-version: 20
-      - run: npm ci
-      - run: node duyurular.js
+
+      - name: Gerekli Chromium bağımlılıklarını kur
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libasound2 \
+            libatk-bridge2.0-0 \
+            libatk1.0-0 \
+            libcups2 \
+            libdbus-1-3 \
+            libgdk-pixbuf2.0-0 \
+            libnspr4 \
+            libnss3 \
+            libx11-xcb1 \
+            libxcomposite1 \
+            libxdamage1 \
+            libxrandr2 \
+            xdg-utils \
+            wget \
+            ca-certificates \
+            fonts-liberation
+
+      - name: Bağımlılıkları kur
+        run: npm ci
+
+      - name: Chromium'u indir (Puppeteer için)
+        run: npx puppeteer browsers install chrome
+
+      - name: Scraper scriptini çalıştır
+        run: node duyurular.js
+
+      - name: Değişiklikleri commit et ve pushla
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add duyurular.json
+          git commit -m "Otomatik güncel duyurular json" || echo "No changes to commit"
+          git push
