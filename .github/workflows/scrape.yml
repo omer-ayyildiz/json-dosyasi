@@ -21,9 +21,9 @@ jobs:
       - name: Bağımlılıkları kur
         run: npm install
 
-      - name: Puppeteer için Chromium'u yükle
+      - name: Chromium yükle (Puppeteer için)
         run: |
-          chmod -R o+rwx node_modules/puppeteer
+          npm install puppeteer --unsafe-perm=true
           npx puppeteer browsers install chrome --chrome-version=stable
 
       - name: Scraper scriptini çalıştır
