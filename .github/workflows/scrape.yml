@@ -2,13 +2,14 @@ name: OGM Duyurular Scraper
 
 on:
   schedule:
-    - cron: '0 */6 * * *' # Her 6 saatte bir çalışır
+    - cron: '0 */6 * * *'
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    env:
+      PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "false"
     steps:
       - name: Repo'yu çek
         uses: actions/checkout@v3

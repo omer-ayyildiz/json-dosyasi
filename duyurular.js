@@ -1,3 +1,4 @@
+process.env.PUPPETEER_SKIP_DOWNLOAD = 'false';
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 
