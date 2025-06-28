@@ -36,6 +36,7 @@ jobs:
             wget \
             ca-certificates \
             fonts-liberation \
+            libasound2 \
             libasound2-plugins \
             libasound2-data
 

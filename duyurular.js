@@ -1,12 +1,16 @@
-process.env.PUPPETEER_SKIP_DOWNLOAD = 'false';
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 
 (async () => {
-  const browser = await puppeteer.launch({ headless: 'new', args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+  // Chromium'u no-sandbox ile başlat (Github Actions uyumlu)
+  const browser = await puppeteer.launch({
+    headless: "new",
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
+  });
+
   const page = await browser.newPage();
   await page.goto('https://www.ogm.gov.tr/tr/duyurular', { waitUntil: 'networkidle2' });
-  await page.waitForSelector('li.item', { timeout: 5000 });
+  await page.waitForSelector('li.item', { timeout: 10000 }); // timeout'u biraz yükselttim
 
   const duyurular = await page.evaluate(() => {
     const items = Array.from(document.querySelectorAll('li.item'));
@@ -25,7 +29,7 @@ const fs = require('fs');
           date: `${gun} ${ay} ${yil}`.trim(),
         };
       })
-      .filter(Boolean); // boşları çıkar
+      .filter(Boolean); // Boş elemanları çıkar
   });
 
   await browser.close();

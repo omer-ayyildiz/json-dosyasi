@@ -15,5 +15,8 @@
   "license": "ISC",
   "dependencies": {
     "puppeteer": "^24.11.1"
+  },
+  "puppeteer": {
+    "default_browser_revision": "1201112"
   }
 }
