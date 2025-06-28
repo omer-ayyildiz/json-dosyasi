@@ -8,23 +8,19 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "false"
     steps:
       - name: Repo'yu çek
         uses: actions/checkout@v3
-
       - name: Node.js kur
         uses: actions/setup-node@v3
         with:
           node-version: 20
-
       - name: Bağımlılıkları kur
         run: npm install
-
+      - name: Chromium'u indir (Puppeteer için)
+        run: npx puppeteer install
       - name: Scraper scriptini çalıştır
         run: node duyurular.js
-
       - name: Değişiklikleri commit et ve pushla
         run: |
           git config user.name "github-actions[bot]"
