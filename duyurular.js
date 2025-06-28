@@ -2,15 +2,13 @@ const puppeteer = require('puppeteer');
 const fs = require('fs');
 
 (async () => {
-  // Chromium'u no-sandbox ile başlat (Github Actions uyumlu)
   const browser = await puppeteer.launch({
-    headless: "new",
+    headless: 'new',
     args: ['--no-sandbox', '--disable-setuid-sandbox']
   });
-
   const page = await browser.newPage();
   await page.goto('https://www.ogm.gov.tr/tr/duyurular', { waitUntil: 'networkidle2' });
-  await page.waitForSelector('li.item', { timeout: 10000 }); // timeout'u biraz yükselttim
+  await page.waitForSelector('li.item', { timeout: 5000 });
 
   const duyurular = await page.evaluate(() => {
     const items = Array.from(document.querySelectorAll('li.item'));
@@ -29,11 +27,10 @@ const fs = require('fs');
           date: `${gun} ${ay} ${yil}`.trim(),
         };
       })
-      .filter(Boolean); // Boş elemanları çıkar
+      .filter(Boolean);
   });
 
   await browser.close();
-
   fs.writeFileSync('duyurular.json', JSON.stringify(duyurular, null, 2), 'utf8');
   console.log("JSON dosyası oluşturuldu!");
 })();

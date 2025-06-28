@@ -2,12 +2,13 @@ name: OGM Duyurular Scraper
 
 on:
   schedule:
-    - cron: '0 */6 * * *'
+    - cron: '0 */6 * * *' # Her 6 saatte bir çalışır
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-22.04
+
     steps:
       - name: Repo'yu çek
         uses: actions/checkout@v3
@@ -17,31 +18,11 @@ jobs:
         with:
           node-version: 20
 
-      - name: Gerekli Chromium bağımlılıklarını kur
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            libatk-bridge2.0-0 \
-            libatk1.0-0 \
-            libcups2 \
-            libdbus-1-3 \
-            libgdk-pixbuf2.0-0 \
-            libnspr4 \
-            libnss3 \
-            libx11-xcb1 \
-            libxcomposite1 \
-            libxdamage1 \
-            libxrandr2 \
-            xdg-utils \
-            wget \
-            ca-certificates \
-            fonts-liberation \
-            libasound2 \
-            libasound2-plugins \
-            libasound2-data
-
       - name: Bağımlılıkları kur
         run: npm install
+
+      - name: Chromium'u indir (Puppeteer)
+        run: npx puppeteer browsers install chrome --chrome-version=stable
 
       - name: Scraper scriptini çalıştır
         run: node duyurular.js
