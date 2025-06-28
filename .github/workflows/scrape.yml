@@ -1,14 +1,13 @@
 name: OGM Duyurular Scraper
 
 on:
-  workflow_dispatch:
   schedule:
     - cron: '0 */6 * * *' # Her 6 saatte bir çalışır
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Repo'yu çek
         uses: actions/checkout@v3
@@ -22,7 +21,6 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            libasound2 \
             libatk-bridge2.0-0 \
             libatk1.0-0 \
             libcups2 \
@@ -37,10 +35,12 @@ jobs:
             xdg-utils \
             wget \
             ca-certificates \
-            fonts-liberation
+            fonts-liberation \
+            libasound2-plugins \
+            libasound2-data
 
       - name: Bağımlılıkları kur
-        run: npm ci
+        run: npm install
 
       - name: Chromium'u indir (Puppeteer için)
         run: npx puppeteer browsers install chrome
