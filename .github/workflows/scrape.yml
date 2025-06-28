@@ -21,8 +21,10 @@ jobs:
       - name: Bağımlılıkları kur
         run: npm install
 
-      - name: Chromium'u indir (Puppeteer)
-        run: npx puppeteer browsers install chrome --chrome-version=stable
+      - name: Puppeteer için Chromium'u yükle
+        run: |
+          chmod -R o+rwx node_modules/puppeteer
+          npx puppeteer browsers install chrome --chrome-version=stable
 
       - name: Scraper scriptini çalıştır
         run: node duyurular.js
